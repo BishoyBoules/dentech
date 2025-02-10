@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Typography, Calendar, Modal, Form, Input, TimePicker, Button, Card } from 'antd';
+import { Typography, Calendar, Modal, Form, Input, TimePicker, Card } from 'antd';
 import type { Dayjs } from 'dayjs';
 
 const { Title } = Typography;
 
-interface Appointment {
+type AppointmentData = {
   date: string;
   time: string;
   name: string;
@@ -27,7 +27,7 @@ const AppointmentsPage: React.FC = () => {
       console.log('Appointment booked:', {
         date: selectedDate?.format('YYYY-MM-DD'),
         ...values,
-      });
+      } as AppointmentData);
       form.resetFields();
       setIsModalVisible(false);
     });
