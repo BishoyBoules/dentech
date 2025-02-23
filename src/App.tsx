@@ -1,10 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
-import MainLayout from './components/Layout/MainLayout';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import HomePage from './pages/HomePage';
-import AppointmentsPage from './pages/AppointmentsPage';
-import ProfilePage from './pages/ProfilePage';
+import { AuthProvider } from './contexts/AuthContext';
+import AppRoutes from './routes';
+import { Navbar } from './components/Navbar';
 import './App.css';
 
 const AppContent = () => {
@@ -20,25 +19,24 @@ const AppContent = () => {
         },
       }}
     >
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path="appointments" element={<AppointmentsPage />} />
-            <Route path="profile" element={<ProfilePage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <AppRoutes />
+      </div>
     </ConfigProvider>
   );
 };
 
-function App() {
+const App = () => {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
