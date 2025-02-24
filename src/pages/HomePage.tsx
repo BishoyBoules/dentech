@@ -9,7 +9,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <Title level={1} className="dark:text-white">Welcome to DenTech</Title>
+        <Title level={1} className="dark:text-white">Welcome to TruMedFin</Title>
         <Paragraph className="text-lg dark:text-gray-300">
           Your trusted partner in dental care management
         </Paragraph>
@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
 
       <Row gutter={[24, 24]} className="mt-8">
         <Col xs={24} md={8}>
-          <Card 
+          <Card
             hoverable
             className="text-center h-full dark:bg-gray-800 dark:text-white"
             cover={<CalendarOutlined className="text-5xl text-primary-600 mt-6" />}
@@ -35,7 +35,7 @@ const HomePage: React.FC = () => {
         </Col>
 
         <Col xs={24} md={8}>
-          <Card 
+          <Card
             hoverable
             className="text-center h-full dark:bg-gray-800 dark:text-white"
             cover={<UserOutlined className="text-5xl text-secondary-600 mt-6" />}
@@ -53,7 +53,7 @@ const HomePage: React.FC = () => {
         </Col>
 
         <Col xs={24} md={8}>
-          <Card 
+          <Card
             hoverable
             className="text-center h-full dark:bg-gray-800 dark:text-white"
             cover={<MedicineBoxOutlined className="text-5xl text-green-600 mt-6" />}

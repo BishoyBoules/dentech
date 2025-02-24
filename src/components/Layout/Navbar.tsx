@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Button, Drawer } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  HomeOutlined, 
-  CalendarOutlined, 
-  UserOutlined, 
+import {
+  HomeOutlined,
+  CalendarOutlined,
+  UserOutlined,
   BulbOutlined,
-  MenuOutlined 
+  MenuOutlined
 } from '@ant-design/icons';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -51,9 +51,9 @@ const Navbar: React.FC = () => {
       <div className="flex justify-between items-center h-full px-4">
         <div className="flex items-center flex-1">
           <h1 className="text-2xl font-bold text-primary-600 dark:text-white mr-8">
-            DenTech
+            TruMedFin
           </h1>
-          
+
           {/* Desktop Menu */}
           {!isMobile && (
             <Menu
@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
             onClick={toggleTheme}
             className="ml-4"
           />
-          
+
           {/* Mobile Menu Button */}
           {isMobile && (
             <Button
