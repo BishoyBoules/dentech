@@ -2,11 +2,12 @@ import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { UserRole } from '../types/user';
 import { ProtectedRoute } from '../components/ProtectedRoute';
+import AdminLayout from '../pages/admin/AdminLayout';
 
 const LoginPage = lazy(() => import('../pages/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/RegisterPage'));
 const AppointmentsPage = lazy(() => import('../pages/AppointmentsPage'));
-const AdminDashboard = lazy(() => import('../pages/AdminDashboard'));
+// const AdminDashboard = lazy(() => import('../pages/AdminDashboard'));
 const SecretaryDashboard = lazy(() => import('../pages/SecretaryDashboard'));
 const UserDashboard = lazy(() => import('../pages/UserDashboard'));
 
@@ -21,19 +22,19 @@ const AppRoutes: React.FC = () => {
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         {/* Public routes */}
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        
+
         {/* Protected routes */}
         <Route
           path="/admin/*"
           element={
             <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
-              <AdminDashboard />
+              <AdminLayout />
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/secretary/*"
           element={
@@ -42,7 +43,7 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/appointments"
           element={
@@ -51,7 +52,7 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/dashboard"
           element={
@@ -62,13 +63,13 @@ const AppRoutes: React.FC = () => {
         />
 
         {/* Redirect root to dashboard or login */}
-        <Route
+        {/* <Route
           path="/"
           element={<Navigate to="/dashboard" replace />}
-        />
+        /> */}
 
         {/* Catch all route */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Suspense>
   );
