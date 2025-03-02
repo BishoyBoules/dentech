@@ -3,7 +3,6 @@ import { Card, Row, Col, List, Tag, Button } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
 
 const SecretaryDashboard: React.FC = () => {
-  // Mock data - replace with actual data from your backend
   const upcomingAppointments = [
     {
       id: 1,
@@ -21,13 +20,12 @@ const SecretaryDashboard: React.FC = () => {
       type: 'Cleaning',
       status: 'pending'
     },
-    // Add more appointments as needed
   ];
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Secretary Dashboard</h1>
-      
+
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
           <Card title="Today's Appointments" extra={<Button type="primary">Add Appointment</Button>}>
@@ -53,7 +51,7 @@ const SecretaryDashboard: React.FC = () => {
             />
           </Card>
         </Col>
-        
+
         <Col xs={24} lg={8}>
           <Card title="Quick Actions">
             <Button type="primary" block className="mb-3">

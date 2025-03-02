@@ -1,8 +1,9 @@
 import {User} from "./user";
 
 export enum Specialization {
+  SPECIALIZATION = 'specialization',
   DIAGNOSIS = 'diagnosis',
-  SCALING = 'scaling'
+  SCALING = 'scaling',
 }
 
 export interface Item {
@@ -10,7 +11,8 @@ export interface Item {
   code?: string;
   name: string;
   price: number;
-  specialization: Specialization;
+  listItem?: boolean;
+  specialization?: Specialization;
   additionDate?: Date;
   exportingDate?: Date;
   exportingUser?: User;

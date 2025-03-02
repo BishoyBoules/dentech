@@ -3,11 +3,11 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { UserRole } from '../types/user';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import AdminLayout from '../pages/admin/AdminLayout';
+import SpecializationsPage from '../pages/admin/SpecializationsPage';
+import ItemDetailsPage from '../pages/admin/ItemDetailsPage';
+import LoginPage from '../pages/LoginPage';
 
-const LoginPage = lazy(() => import('../pages/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/RegisterPage'));
-const AppointmentsPage = lazy(() => import('../pages/AppointmentsPage'));
-// const AdminDashboard = lazy(() => import('../pages/AdminDashboard'));
 const SecretaryDashboard = lazy(() => import('../pages/SecretaryDashboard'));
 const UserDashboard = lazy(() => import('../pages/UserDashboard'));
 
@@ -21,22 +21,24 @@ const AppRoutes: React.FC = () => {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
+        {/* Root redirect */}
+        <Route path="/" element={<Navigate to="/admin/specializations" replace />} />
+
         {/* Public routes */}
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Protected routes */}
-        <Route
-          path="/admin/*"
-          element={
-            <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        />
+        {/* Protected admin routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="/admin/specializations" replace />} />
+          <Route path="specializations" element={<SpecializationsPage />} />
+          <Route path="items/:id" element={<ItemDetailsPage />} />
+          <Route path="items/:id/sub-items/:subId" element={<ItemDetailsPage />} />
+        </Route>
 
+        {/* Protected secretary routes */}
         <Route
-          path="/secretary/*"
+          path="/secretary"
           element={
             <ProtectedRoute allowedRoles={[UserRole.SECRETARY]}>
               <SecretaryDashboard />
@@ -44,17 +46,9 @@ const AppRoutes: React.FC = () => {
           }
         />
 
+        {/* Protected user routes */}
         <Route
-          path="/appointments"
-          element={
-            <ProtectedRoute allowedRoles={[UserRole.USER, UserRole.SECRETARY, UserRole.ADMIN]}>
-              <AppointmentsPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/dashboard"
+          path="/user"
           element={
             <ProtectedRoute allowedRoles={[UserRole.USER]}>
               <UserDashboard />
@@ -62,14 +56,8 @@ const AppRoutes: React.FC = () => {
           }
         />
 
-        {/* Redirect root to dashboard or login */}
-        {/* <Route
-          path="/"
-          element={<Navigate to="/dashboard" replace />}
-        /> */}
-
         {/* Catch all route */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/admin/specializations" replace />} />
       </Routes>
     </Suspense>
   );

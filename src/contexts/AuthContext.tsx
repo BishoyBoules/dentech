@@ -27,13 +27,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        // TODO: Replace with actual API call
+        // Mock user data
         const mockUser: User = {
           id: '1',
-          email: 'user@example.com',
-          name: 'Test User',
-          role: UserRole.USER,
-          permissions: [Permission.VIEW_APPOINTMENTS, Permission.VIEW_PATIENTS],
+          email: 'admin@example.com',
+          name: 'Admin User',
+          role: UserRole.ADMIN,
+          permissions: Object.values(Permission),
           createdAt: '2025-02-23T20:56:21+02:00',
           updatedAt: '2025-02-23T20:56:21+02:00',
         };
@@ -66,52 +66,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
-      // Simulating API call with mock data
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-
-      // Mock successful login for test@example.com/password
-      if (email === 'test@example.com' && password === 'password') {
-        const mockData = {
-          token: 'mock-jwt-token',
-          user: {
-            id: '1',
-            email: 'test@example.com',
-            name: 'Test User',
-            role: UserRole.USER,
-            permissions: [Permission.VIEW_APPOINTMENTS, Permission.VIEW_PATIENTS],
-            createdAt: '2025-02-23T21:08:17+02:00',
-            updatedAt: '2025-02-23T21:08:17+02:00'
-          }
-        };
-
-        localStorage.setItem('token', mockData.token);
-        setAuthState({
-          user: mockData.user,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null
-        });
-        return;
-      }
-
       // Mock admin login for admin@example.com/admin
       if (email === 'admin@example.com' && password === 'admin') {
-        const mockData = {
-          token: 'mock-jwt-token-admin',
-          user: {
-            id: '2',
-            email: 'admin@example.com',
-            name: 'Admin User',
-            role: UserRole.ADMIN,
-            permissions: Object.values(Permission),
-            createdAt: '2025-02-23T21:08:17+02:00',
-            updatedAt: '2025-02-23T21:08:17+02:00'
-          }
+        const mockUser: User = {
+          id: '2',
+          email: 'admin@example.com',
+          name: 'Admin User',
+          role: UserRole.ADMIN,
+          permissions: Object.values(Permission),
+          createdAt: '2025-02-23T21:08:17+02:00',
+          updatedAt: '2025-02-23T21:08:17+02:00'
         };
 
-        localStorage.setItem('token', mockData.token);
+        localStorage.setItem('token', 'mock-jwt-token-admin');
         setAuthState({
-          user: mockData.user,
+          user: mockUser,
           isAuthenticated: true,
           isLoading: false,
           error: null
@@ -119,86 +88,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Mock secretary login for secretary@example.com/secretary
-      if (email === 'secretary@example.com' && password === 'secretary') {
-        const mockData = {
-          token: 'mock-jwt-token-secretary',
-          user: {
-            id: '3',
-            email: 'secretary@example.com',
-            name: 'Secretary User',
-            role: UserRole.SECRETARY,
-            permissions: [
-              Permission.VIEW_PATIENTS,
-              Permission.EDIT_PATIENTS,
-              Permission.VIEW_APPOINTMENTS,
-              Permission.SCHEDULE_APPOINTMENTS,
-              Permission.VIEW_PAYMENTS
-            ],
-            createdAt: '2025-02-23T21:08:17+02:00',
-            updatedAt: '2025-02-23T21:08:17+02:00'
-          }
-        };
-
-        localStorage.setItem('token', mockData.token);
-        setAuthState({
-          user: mockData.user,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null
-        });
-        return;
-      }
-
-      // If no matching credentials, throw error
       throw new Error('Invalid credentials');
     } catch (error) {
+      localStorage.removeItem('token');
       setAuthState(prev => ({
         ...prev,
+        user: null,
+        isAuthenticated: false,
         isLoading: false,
-        error: 'Login failed',
+        error: 'Invalid credentials'
       }));
+      throw error;
     }
   };
 
   const logout = async () => {
-    try {
-      localStorage.removeItem('token');
-      setAuthState({
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: null,
-      });
-    } catch (error) {
-      setAuthState(prev => ({
-        ...prev,
-        error: 'Logout failed',
-      }));
-    }
+    localStorage.removeItem('token');
+    setAuthState({
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
+      error: null,
+    });
   };
 
   const register = async (email: string, password: string, name: string, role: UserRole = UserRole.USER) => {
     try {
       setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
-      // TODO: Replace with actual API call
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, role }),
-      });
+      // Mock registration
+      const mockUser: User = {
+        id: Math.random().toString(),
+        email,
+        name,
+        role,
+        permissions: role === UserRole.ADMIN ? Object.values(Permission) : [Permission.VIEW_APPOINTMENTS],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
 
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-
-      const data = await response.json();
-      const user: User = data.user;
-      localStorage.setItem('token', data.token);
-
+      localStorage.setItem('token', 'mock-jwt-token');
       setAuthState({
-        user,
+        user: mockUser,
         isAuthenticated: true,
         isLoading: false,
         error: null,
@@ -209,81 +140,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading: false,
         error: 'Registration failed',
       }));
+      throw error;
     }
-  };
-
-  // Add these mock users for testing
-  const mockUsers: User[] = [
-    {
-      id: '1',
-      email: 'test@example.com',
-      name: 'Test User',
-      role: UserRole.USER,
-      permissions: [Permission.VIEW_APPOINTMENTS, Permission.VIEW_PATIENTS],
-      createdAt: '2025-02-23T21:16:17+02:00',
-      updatedAt: '2025-02-23T21:16:17+02:00'
-    },
-    {
-      id: '2',
-      email: 'admin@example.com',
-      name: 'Admin User',
-      role: UserRole.ADMIN,
-      permissions: Object.values(Permission),
-      createdAt: '2025-02-23T21:16:17+02:00',
-      updatedAt: '2025-02-23T21:16:17+02:00'
-    },
-    {
-      id: '3',
-      email: 'secretary@example.com',
-      name: 'Secretary User',
-      role: UserRole.SECRETARY,
-      permissions: [
-        Permission.VIEW_PATIENTS,
-        Permission.EDIT_PATIENTS,
-        Permission.VIEW_APPOINTMENTS,
-        Permission.SCHEDULE_APPOINTMENTS,
-        Permission.VIEW_PAYMENTS
-      ],
-      createdAt: '2025-02-23T21:16:17+02:00',
-      updatedAt: '2025-02-23T21:16:17+02:00'
-    }
-  ];
-
-  const getAllUsers = async (): Promise<User[]> => {
-    // In a real app, this would be an API call
-    return mockUsers;
   };
 
   const updateUserPermissions = async (userId: string, permissions: Permission[]) => {
     try {
-      // In a real app, this would be an API call
-      const userToUpdate = mockUsers.find(u => u.id === userId);
-      if (!userToUpdate) {
-        throw new Error('User not found');
-      }
+      setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
-      // Update the mock user's permissions
-      userToUpdate.permissions = permissions;
-      userToUpdate.updatedAt = new Date().toISOString();
+      // Mock API call
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      // If the current user is being updated, update the auth state
-      if (authState.user?.id === userId) {
+      if (authState.user && authState.user.id === userId) {
         setAuthState(prev => ({
           ...prev,
-          user: {
-            ...prev.user!,
-            permissions,
-            updatedAt: new Date().toISOString()
-          }
+          user: prev.user ? { ...prev.user, permissions } : null,
+          isLoading: false,
         }));
       }
     } catch (error) {
       setAuthState(prev => ({
         ...prev,
-        error: 'Failed to update permissions'
+        isLoading: false,
+        error: 'Failed to update permissions',
       }));
       throw error;
     }
+  };
+
+  const getAllUsers = async (): Promise<User[]> => {
+    // Mock API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    return [
+      {
+        id: '1',
+        email: 'admin@example.com',
+        name: 'Admin User',
+        role: UserRole.ADMIN,
+        permissions: Object.values(Permission),
+        createdAt: '2025-02-23T21:08:17+02:00',
+        updatedAt: '2025-02-23T21:08:17+02:00',
+      },
+      {
+        id: '2',
+        email: 'user@example.com',
+        name: 'Regular User',
+        role: UserRole.USER,
+        permissions: [Permission.VIEW_APPOINTMENTS],
+        createdAt: '2025-02-23T21:08:17+02:00',
+        updatedAt: '2025-02-23T21:08:17+02:00',
+      },
+    ];
   };
 
   return (
@@ -304,7 +212,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;

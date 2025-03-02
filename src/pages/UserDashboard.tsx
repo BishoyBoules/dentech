@@ -3,7 +3,6 @@ import { Card, Row, Col, Button, List, Tag } from 'antd';
 import { CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 const UserDashboard: React.FC = () => {
-  // Mock data - replace with actual data from your backend
   const appointments = [
     {
       id: 1,
@@ -21,13 +20,12 @@ const UserDashboard: React.FC = () => {
       doctor: 'Dr. Johnson',
       status: 'completed'
     },
-    // Add more appointments as needed
   ];
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">My Dashboard</h1>
-      
+
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
           <Card title="My Appointments">
@@ -60,7 +58,7 @@ const UserDashboard: React.FC = () => {
             />
           </Card>
         </Col>
-        
+
         <Col xs={24} lg={8}>
           <Card title="Quick Actions">
             <Button type="primary" block className="mb-3">

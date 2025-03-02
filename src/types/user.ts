@@ -1,7 +1,8 @@
 export enum UserRole {
   ADMIN = 'admin',
   SECRETARY = 'secretary',
-  USER = 'user'
+  USER = 'user',
+  PATIENT = 'patient'
 }
 
 export enum Permission {
@@ -15,7 +16,9 @@ export enum Permission {
   PROCESS_PAYMENTS = 'process_payments',
   VIEW_REPORTS = 'view_reports',
   MANAGE_USERS = 'manage_users',
-  MANAGE_PERMISSIONS = 'manage_permissions'
+  MANAGE_PERMISSIONS = 'manage_permissions',
+  MANAGE_STOCK = 'manage_stock',
+  DATA_ENTRY = 'data_entry'
 }
 
 export interface User {

@@ -1,9 +1,7 @@
-import { BrowserRouter } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import AppRoutes from './routes';
-import { Navbar } from './components/Navbar';
 import './App.css';
 
 const AppContent = () => {
@@ -20,7 +18,6 @@ const AppContent = () => {
       }}
     >
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
         <AppRoutes />
       </div>
     </ConfigProvider>
@@ -29,13 +26,11 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <AuthProvider>
       <ThemeProvider>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
+        <AppContent />
       </ThemeProvider>
-    </BrowserRouter>
+    </AuthProvider>
   );
 };
 
