@@ -95,7 +95,7 @@ const SubItemForm: React.FC<SubItemFormProps> = ({ subItem, onSubmit, onCancel, 
 const ItemDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, subId } = useParams<{ id: string; subId: string }>();
+  const { subId } = useParams<{ id: string; subId: string }>();
   const [item, setItem] = useState<Item | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingSubItem, setEditingSubItem] = useState<Item | undefined>();

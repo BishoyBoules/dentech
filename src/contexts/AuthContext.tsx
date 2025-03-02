@@ -112,7 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const register = async (email: string, password: string, name: string, role: UserRole = UserRole.USER) => {
+  const register = async (email: string, _password: string, name: string, role: UserRole = UserRole.USER) => {
     try {
       setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
