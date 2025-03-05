@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Item, Specialization } from '../types/item';
 
@@ -18,6 +17,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
     const [defaultNumOfSubUnits, setDefaultNumOfSubUnits] = useState(0);
     const [pricePerUnit, setPricePerUnit] = useState(0);
     const [pricePerSubUnit, setPricePerSubUnit] = useState(0);
+    const [expirationDate, setExpirationDate] = useState(item?.expiration_date || '');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,6 +30,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
             company_name: companyName,
             default_number_of_units: defaultNumOfUnits,
             default_number_of_subunits: defaultNumOfSubUnits,
+            expiration_date: expirationDate
         });
     };
 
@@ -118,6 +119,17 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                 </div>
+                <div>
+                    <label htmlFor="expirationDate" className="block text-sm font-medium text-gray-700">Expiration Date *</label>
+                    <input
+                        type="date"
+                        id="expirationDate"
+                        value={expirationDate}
+                        onChange={(e) => setExpirationDate(e.target.value)}
+                        required
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                </div>
             </div>
             <div className="flex justify-end space-x-3 pt-4">
                 <button
@@ -138,4 +150,4 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
     );
 };
 
-export default ItemForm
+export default ItemForm;
