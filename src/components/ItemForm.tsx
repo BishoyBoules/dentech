@@ -10,10 +10,10 @@ interface ItemFormProps {
 }
 
 const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onCancel }) => {
-    const [name, setName] = useState(item?.name || '');
-    const [code, setCode] = useState(item?.code || '');
+    const [name, setName] = useState(item?.item_name || '');
+    const [code, setCode] = useState(item?.item_code || '');
     const [price, setPrice] = useState(0);
-    const [companyName, setCompanyName] = useState(item?.companyName || '');
+    const [companyName, setCompanyName] = useState(item?.company_name || '');
     const [defaultNumOfUnits, setDefaultNumOfUnits] = useState(0);
     const [defaultNumOfSubUnits, setDefaultNumOfSubUnits] = useState(0);
     const [pricePerUnit, setPricePerUnit] = useState(0);
@@ -23,15 +23,13 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
         e.preventDefault();
         onSubmit({
             id: item?.id,
-            code,
-            name,
-            price: price,
+            item_name: name,
+            item_code: code,
+            price_per_unit: price,
             specialization,
-            companyName,
-            defaultNumOfUnits: defaultNumOfUnits,
-            defaultNumOfSubUnits: defaultNumOfSubUnits,
-            pricePerUnit: pricePerUnit,
-            pricePerSubUnit: pricePerSubUnit,
+            company_name: companyName,
+            default_number_of_units: defaultNumOfUnits,
+            default_number_of_subunits: defaultNumOfSubUnits,
         });
     };
 
@@ -59,7 +57,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                 </div>
-                {!item?.listItem && <div>
+                {!item?.item_name && <div>
                     <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price *</label>
                     <input
                         type="number"

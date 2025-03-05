@@ -207,10 +207,9 @@ const ItemsPage: React.FC = () => {
         price_per_unit: +data.price_per_unit,
         item_code: data.item_code,
         company_name: data.company_name,
-        number_of_units: +(data.number_of_units ?? 0),
-        default_number_of_units: +data.default_number_of_units,
-        default_number_of_subunits: +data.default_number_of_subunits,
-        expiration_date: data.expiration_date
+        default_number_of_units: +(data.default_number_of_units ?? 0),
+        default_number_of_subunits: +(data.default_number_of_subunits ?? 0),
+        specialization: data.specialization
       });
       setItems(prevItems => [...prevItems, response.data]);
     } catch (error) {
@@ -229,10 +228,9 @@ const ItemsPage: React.FC = () => {
         price_per_unit: +data.price_per_unit,
         item_code: data.item_code,
         company_name: data.company_name,
-        number_of_units: +(data.number_of_units ?? 0),
-        default_number_of_units: +data.default_number_of_units,
-        default_number_of_subunits: +data.default_number_of_subunits,
-        expiration_date: data.expiration_date
+        default_number_of_units: +(data.default_number_of_units ?? 0),
+        default_number_of_subunits: +(data.default_number_of_subunits ?? 0),
+        specialization: data.specialization
       });
       setItems(prevItems =>
         prevItems.map(item =>
