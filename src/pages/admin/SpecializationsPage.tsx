@@ -11,7 +11,7 @@ const SpecializationSection: React.FC<{
   onAddItem: (item: Partial<Item>) => void;
   onUpdateItem: (item: Partial<Item>) => void;
   onDeleteItem: (itemId: string) => void;
-}> = ({ title, specialization, items, onAddItem, onUpdateItem, onDeleteItem }) => {
+}> = ({ specialization, items, onAddItem, onUpdateItem, onDeleteItem }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | undefined>();
   const navigate = useNavigate()
@@ -29,7 +29,7 @@ const SpecializationSection: React.FC<{
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Specializations Managment</h2>
         <button
           onClick={() => setIsFormOpen(true)}
           className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"

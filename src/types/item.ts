@@ -8,37 +8,14 @@ export enum Specialization {
 
 export interface Item {
   id: string;
-  code?: string;
-  name: string;
-  price: number;
-  listItem?: boolean;
+  item_name: string;
+  price_per_unit: number;
+  item_code: string;
+  company_name: string;
+  default_number_of_units: number;
+  default_number_of_subunits: number;
+  expiration_date: string;
   specialization?: Specialization;
-  additionDate?: Date;
-  exportingDate?: Date;
   exportingUser?: User;
-  releaseDate?: Date;
-  expirationDate?: Date;
-  companyName?: string;
-  defaultNumOfUnits?: number;
-  defaultNumOfSubUnits?: number;
-  pricePerUnit?: number;
-  pricePerSubUnit?: number;
-  totalNumOfSubUnits?: number;
-  subItems?: Item[];
+  number_of_units?: number;
 }
-
-// export interface CreateItemDto {
-//   name: string;
-//   price: number;
-//   description?: string;
-//   companyName: string;
-//   defaultNumOfUnits: number;
-// }
-
-// export interface UpdateItemDto {
-//   name?: string;
-//   price?: number;
-//   description?: string;
-//   companyName?: string;
-//   defaultNumOfUnits?: number;
-// }

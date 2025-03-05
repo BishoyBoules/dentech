@@ -5,6 +5,15 @@ import { fileURLToPath } from 'url';
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://truemedfin-testing.onrender.com',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {

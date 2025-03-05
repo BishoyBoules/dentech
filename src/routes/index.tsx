@@ -6,6 +6,8 @@ import AdminLayout from '../pages/admin/AdminLayout';
 import SpecializationsPage from '../pages/admin/SpecializationsPage';
 import ItemDetailsPage from '../pages/admin/ItemDetailsPage';
 import LoginPage from '../pages/LoginPage';
+import ItemsPage from '../pages/admin/ItemsPage';
+import ListsPage from '../pages/admin/ListsPage';
 
 const RegisterPage = lazy(() => import('../pages/RegisterPage'));
 const SecretaryDashboard = lazy(() => import('../pages/SecretaryDashboard'));
@@ -31,6 +33,8 @@ const AppRoutes: React.FC = () => {
         {/* Protected admin routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/specializations" replace />} />
+          <Route path="items" element={<ItemsPage />} />
+          <Route path="lists" element={<ListsPage />} />
           <Route path="specializations" element={<SpecializationsPage />} />
           <Route path="items/:id" element={<ItemDetailsPage />} />
           <Route path="items/:id/sub-items/:subId" element={<ItemDetailsPage />} />
