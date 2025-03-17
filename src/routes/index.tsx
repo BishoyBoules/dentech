@@ -10,7 +10,6 @@ import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
 import ItemsPage from '../pages/admin/ItemsPage';
 import ListsPage from '../pages/admin/ListsPage';
-import HomePage from '../pages/HomePage';
 
 const RegisterPage = lazy(() => import('../pages/RegisterPage'));
 const SecretaryDashboard = lazy(() => import('../pages/SecretaryDashboard'));

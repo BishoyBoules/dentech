@@ -55,11 +55,11 @@ const SpecializationSection: React.FC<{
                         {items.map((item) => (
                             <tr
                                 key={item.id}
-                                className={`hover:bg-gray-50 ${item.listItem && 'cursor-pointer'}`}
-                                onClick={() => item.listItem && navigate(`/admin/items/${item.id}`, { state: { item } })}
+                                className={`hover:bg-gray-50 ${item.id && 'cursor-pointer'}`}
+                                onClick={() => navigate(`/admin/items/${item.id}`, { state: { item } })}
                             >
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {item.name}
+                                    {item.item_name}
                                     {item.subItems && item.subItems.length > 0 && (
                                         <span className="ml-2 text-xs text-indigo-600">
                                             ({item.subItems.length} sub-items)
@@ -70,7 +70,7 @@ const SpecializationSection: React.FC<{
                     {item.code || 'N/A'}
                   </td> */}
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    ${item.price.toFixed(2)}
+                                    ${item.price_per_unit.toFixed(2)}
                                 </td>
                                 {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {item.companyName || 'N/A'}

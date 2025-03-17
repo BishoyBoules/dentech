@@ -18,4 +18,6 @@ export interface Item {
   specialization?: Specialization;
   exportingUser?: User;
   number_of_units?: number;
+  subItems?: Item[];
+  pricePerSubUnit?: number;
 }

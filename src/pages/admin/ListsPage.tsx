@@ -86,13 +86,12 @@ const ListForm: React.FC<ListFormProps> = ({ list, onSubmit, onCancel }) => {
 
 const ListsPage: React.FC = () => {
     const [lists, setLists] = useState<List[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedList, setSelectedList] = useState<List | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [error, _setError] = useState('');
 
     useEffect(() => {
         const fetchLists = async () => {

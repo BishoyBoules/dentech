@@ -174,13 +174,12 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, onSubmit, onCancel }) => {
 
 const ItemsPage: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, _setCurrentPage] = useState(1);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -245,14 +244,14 @@ const ItemsPage: React.FC = () => {
     }
   };
 
-  const handleDeleteItem = async (id: string) => {
-    try {
-      await axios.delete(`/api/inventory/items/${id}/`);
-      setItems(prevItems => prevItems.filter(item => item.id !== id));
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
-  };
+  // const handleDeleteItem = async (id: string) => {
+  //   try {
+  //     await axios.delete(`/api/inventory/items/${id}/`);
+  //     setItems(prevItems => prevItems.filter(item => item.id !== id));
+  //   } catch (error) {
+  //     console.error('Error deleting item:', error);
+  //   }
+  // };
 
   const handleEdit = (item: Item) => {
     setSelectedItem(item);

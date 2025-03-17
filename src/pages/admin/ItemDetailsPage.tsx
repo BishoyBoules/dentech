@@ -13,17 +13,17 @@ interface SubItemFormProps {
 }
 
 const SubItemForm: React.FC<SubItemFormProps> = ({ subItem, onSubmit, onCancel, visible }) => {
-  const [name, setName] = useState(subItem?.name || '');
-  const [price, setPrice] = useState(subItem?.price || 0);
-  const [companyName, setCompanyName] = useState(subItem?.companyName || '');
+  const [name, setName] = useState(subItem?.item_name || '');
+  const [price, setPrice] = useState(subItem?.price_per_unit || 0);
+  const [companyName, setCompanyName] = useState(subItem?.company_name || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
       id: subItem?.id || Math.random().toString(),
-      name,
-      price,
-      companyName,
+      item_name: name,
+      price_per_unit: price,
+      company_name: companyName,
     });
   };
 
@@ -185,7 +185,7 @@ const ItemDetailsPage: React.FC = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{item.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{item.item_name}</h2>
         </div>
         <div className="flex space-x-4">
           <button
@@ -224,7 +224,7 @@ const ItemDetailsPage: React.FC = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {item.subItems?.map((subItem) => {
-              const rowProps = subItem.listItem ? {
+              const rowProps = subItem.id ? {
                 onClick: () => navigate(`/admin/items/${item.id}/sub-items/${subItem.id}`, { state: { item: subItem } }),
                 className: "hover:bg-gray-50 cursor-pointer"
               } : {
@@ -234,15 +234,15 @@ const ItemDetailsPage: React.FC = () => {
               return (
                 <tr key={subItem.id} {...rowProps}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {subItem.name}
-                    {subItem.listItem && (
+                    {subItem.item_name}
+                    {subItem.id && (
                       <span className="ml-2 text-xs text-indigo-600">
                         ({subItem.subItems?.length} sub-items)
                       </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${subItem.price.toFixed(2)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{subItem.companyName || 'N/A'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${subItem.price_per_unit.toFixed(2)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{subItem.company_name || 'N/A'}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={(e) => {

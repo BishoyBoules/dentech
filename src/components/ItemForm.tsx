@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Item, Specialization } from '../types/item';
+import dayjs from 'dayjs';
 
 interface ItemFormProps {
     item?: Item;
@@ -9,27 +10,29 @@ interface ItemFormProps {
 }
 
 const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onCancel }) => {
-    const [name, setName] = useState(item?.item_name || '');
-    const [code, setCode] = useState(item?.item_code || '');
-    const [price, setPrice] = useState(0);
+    const [itemName, setItemName] = useState(item?.item_name || '');
+    const [itemCode, setItemCode] = useState(item?.item_code || '');
+    const [pricePerUnit, setPricePerUnit] = useState(item?.price_per_unit || 0);
     const [companyName, setCompanyName] = useState(item?.company_name || '');
-    const [defaultNumOfUnits, setDefaultNumOfUnits] = useState(0);
-    const [defaultNumOfSubUnits, setDefaultNumOfSubUnits] = useState(0);
-    const [pricePerUnit, setPricePerUnit] = useState(0);
-    const [pricePerSubUnit, setPricePerSubUnit] = useState(0);
-    const [expirationDate, setExpirationDate] = useState(item?.expiration_date || '');
+    const [defaultNumOfUnits, setDefaultNumOfUnits] = useState(item?.default_number_of_units || 1);
+    const [defaultNumOfSubUnits, setDefaultNumOfSubUnits] = useState(item?.default_number_of_subunits || 1);
+    const [pricePerSubUnit, setPricePerSubUnit] = useState(item?.pricePerSubUnit || 0);
+    const [expirationDate, setExpirationDate] = useState(
+        item?.expiration_date ? dayjs(item.expiration_date).format('YYYY-MM-DD') : ''
+    );
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit({
             id: item?.id,
-            item_name: name,
-            item_code: code,
-            price_per_unit: price,
+            item_name: itemName,
+            item_code: itemCode,
+            price_per_unit: pricePerUnit,
             specialization,
             company_name: companyName,
             default_number_of_units: defaultNumOfUnits,
             default_number_of_subunits: defaultNumOfSubUnits,
+            pricePerSubUnit,
             expiration_date: expirationDate
         });
     };
@@ -38,39 +41,39 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name *</label>
+                    <label htmlFor="itemName" className="block text-sm font-medium text-gray-700">Name *</label>
                     <input
                         type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        id="itemName"
+                        value={itemName}
+                        onChange={(e) => setItemName(e.target.value)}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         required
                     />
                 </div>
                 <div>
-                    <label htmlFor="code" className="block text-sm font-medium text-gray-700">Code</label>
+                    <label htmlFor="itemCode" className="block text-sm font-medium text-gray-700">Code</label>
                     <input
                         type="text"
-                        id="code"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
+                        id="itemCode"
+                        value={itemCode}
+                        onChange={(e) => setItemCode(e.target.value)}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                 </div>
-                {!item?.item_name && <div>
-                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price *</label>
+                <div>
+                    <label htmlFor="pricePerUnit" className="block text-sm font-medium text-gray-700">Price per Unit *</label>
                     <input
                         type="number"
-                        id="price"
-                        value={price}
-                        onChange={(e) => setPrice(+e.target.value)}
-                        step="0.01"
-                        min="0"
+                        id="pricePerUnit"
+                        value={pricePerUnit}
+                        onChange={(e) => setPricePerUnit(Number(e.target.value))}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         required
+                        min="0"
+                        step="0.01"
                     />
-                </div>}
+                </div>
                 <div>
                     <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">Company Name</label>
                     <input
@@ -82,25 +85,25 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
                     />
                 </div>
                 <div>
-                    <label htmlFor="defaultNumOfUnits" className="block text-sm font-medium text-gray-700">Number of Units</label>
+                    <label htmlFor="defaultNumOfUnits" className="block text-sm font-medium text-gray-700">Default Number of Units</label>
                     <input
                         type="number"
                         id="defaultNumOfUnits"
                         value={defaultNumOfUnits}
-                        onChange={(e) => setDefaultNumOfUnits(+e.target.value)}
-                        min="0"
+                        onChange={(e) => setDefaultNumOfUnits(Number(e.target.value))}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        min="1"
                     />
                 </div>
                 <div>
-                    <label htmlFor="defaultNumOfSubUnits" className="block text-sm font-medium text-gray-700">Number of Sub Units</label>
+                    <label htmlFor="defaultNumOfSubUnits" className="block text-sm font-medium text-gray-700">Default Number of Sub Units</label>
                     <input
                         type="number"
                         id="defaultNumOfSubUnits"
                         value={defaultNumOfSubUnits}
-                        onChange={(e) => setDefaultNumOfSubUnits(+e.target.value)}
-                        min="0"
+                        onChange={(e) => setDefaultNumOfSubUnits(Number(e.target.value))}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        min="1"
                     />
                 </div>
                 <div>
@@ -109,29 +112,24 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
                         type="number"
                         id="pricePerSubUnit"
                         value={pricePerSubUnit}
-                        onChange={(e) => {
-                            setPricePerSubUnit(+e.target.value)
-                            setPricePerUnit(+e.target.value * defaultNumOfSubUnits)
-                            setPrice(pricePerUnit * defaultNumOfUnits)
-                        }}
-                        step="0.01"
-                        min="0"
+                        onChange={(e) => setPricePerSubUnit(Number(e.target.value))}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        min="0"
+                        step="0.01"
                     />
                 </div>
                 <div>
-                    <label htmlFor="expirationDate" className="block text-sm font-medium text-gray-700">Expiration Date *</label>
+                    <label htmlFor="expirationDate" className="block text-sm font-medium text-gray-700">Expiration Date</label>
                     <input
                         type="date"
                         id="expirationDate"
                         value={expirationDate}
                         onChange={(e) => setExpirationDate(e.target.value)}
-                        required
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                 </div>
             </div>
-            <div className="flex justify-end space-x-3 pt-4">
+            <div className="flex justify-end space-x-3">
                 <button
                     type="button"
                     onClick={onCancel}
@@ -141,9 +139,9 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, specialization, onSubmit, onC
                 </button>
                 <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700"
+                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
                 >
-                    {item ? 'Update' : 'Create'}
+                    Save
                 </button>
             </div>
         </form>
