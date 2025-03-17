@@ -1,0 +1,55 @@
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('../Fonts/NeueMontreal-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('../Fonts/NeueMontreal-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('../Fonts/NeueMontreal-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('../Fonts/NeueMontreal-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sequel Sans';
+    src: url('../Fonts/Sequel Sans Roman Body.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sequel Sans';
+    src: url('../Fonts/Sequel Sans Bold Body.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sequel Sans';
+    src: url('../Fonts/Sequel Sans Medium Body.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sequel Sans';
+    src: url('../Fonts/Sequel Sans Light Body.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}

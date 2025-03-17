@@ -5,9 +5,12 @@ import { ProtectedRoute } from '../components/ProtectedRoute';
 import AdminLayout from '../pages/admin/AdminLayout';
 import SpecializationsPage from '../pages/admin/SpecializationsPage';
 import ItemDetailsPage from '../pages/admin/ItemDetailsPage';
+import AboutPage from '../pages/AboutPage';
+import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
 import ItemsPage from '../pages/admin/ItemsPage';
 import ListsPage from '../pages/admin/ListsPage';
+import HomePage from '../pages/HomePage';
 
 const RegisterPage = lazy(() => import('../pages/RegisterPage'));
 const SecretaryDashboard = lazy(() => import('../pages/SecretaryDashboard'));
@@ -24,7 +27,9 @@ const AppRoutes: React.FC = () => {
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/admin/specializations" replace />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/admin/" element={<AdminLayout />} />
 
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
