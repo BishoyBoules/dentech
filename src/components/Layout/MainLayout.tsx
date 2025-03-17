@@ -20,7 +20,7 @@ const MainLayout: React.FC = () => {
         </div>
       </Content>
       <Footer className="text-center bg-white dark:bg-gray-800 dark:text-white">
-        TruMedFin ©{new Date().getFullYear()} Created with care
+        Truemedfin ©{new Date().getFullYear()} Created with care
       </Footer>
     </Layout>
   );

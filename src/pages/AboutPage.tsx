@@ -11,7 +11,7 @@ const AboutPage: React.FC = () => {
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="flex-shrink-0 flex items-center">
-                                <img src={Logo} alt="Trumedfin Logo" className="w-48 h-auto" />
+                                <img src={Logo} alt="Truemedfin Logo" className="w-48 h-auto" />
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
@@ -32,11 +32,11 @@ const AboutPage: React.FC = () => {
             {/* About Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="max-w-3xl mx-auto">
-                    <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-8 font-display">About Trumedfin</h1>
+                    <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-8 font-display">About Truemedfin</h1>
 
                     <div className="prose prose-indigo max-w-none">
                         <p className="text-lg text-gray-500 mb-6 font-sans">
-                            Trumedfin is a comprehensive medical practice management system designed to streamline the day-to-day operations of modern medical clinics. Our platform combines cutting-edge technology with user-friendly interfaces to provide an all-in-one solution for medical professionals.
+                            Truemedfin is a comprehensive medical practice management system designed to streamline the day-to-day operations of modern medical clinics. Our platform combines cutting-edge technology with user-friendly interfaces to provide an all-in-one solution for medical professionals.
                         </p>
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4 font-display">Our Mission</h2>
@@ -54,7 +54,7 @@ const AboutPage: React.FC = () => {
                             <li>Secure data storage</li>
                         </ul>
 
-                        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4 font-display">Why Choose Trumedfin?</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4 font-display">Why Choose Truemedfin?</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                             <div className="bg-white p-6 rounded-lg shadow-sm">
                                 <h3 className="text-lg font-semibold text-gray-900 mb-2 font-display">Easy to Use</h3>

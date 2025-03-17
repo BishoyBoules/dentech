@@ -127,7 +127,7 @@ const SpecializationsPage: React.FC = () => {
         code: 'DIAG001',
         price: 150.00,
         specialization: Specialization.SPECIALIZATION,
-        companyName: 'TruMedFin',
+        companyName: 'Truemedfin',
         defaultNumOfUnits: 1,
         listItem: true,
         subItems: [

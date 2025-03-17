@@ -12,7 +12,7 @@ const LandingPage: React.FC = () => {
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="flex-shrink-0 flex items-center">
-                                <img src={Logo} alt="Trumedfin Logo" className="w-48 h-auto" />
+                                <img src={Logo} alt="Truemedfin Logo" className="w-48 h-auto" />
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
@@ -35,7 +35,7 @@ const LandingPage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                     <div className="text-center">
                         <div className="flex justify-center mb-8">
-                            <img src={Logo2} alt="Trumedfin Logo" className="w-48 h-auto" />
+                            <img src={Logo2} alt="Truemedfin Logo" className="w-48 h-auto" />
                         </div>
                         <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl font-display">
                             <span className="block">Modern Solutions for</span>

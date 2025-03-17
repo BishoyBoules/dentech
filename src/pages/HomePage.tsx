@@ -9,7 +9,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <Title level={1} className="dark:text-white">Welcome to TruMedFin</Title>
+        <Title level={1} className="dark:text-white">Welcome to Truemedfin</Title>
         <Paragraph className="text-lg dark:text-gray-300">
           Your trusted partner in dental care management
         </Paragraph>

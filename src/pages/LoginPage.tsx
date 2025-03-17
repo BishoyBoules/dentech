@@ -41,7 +41,7 @@ const LoginPage: React.FC = () => {
         <div>
           <div className="flex justify-center">
             <a href="/">
-              <img src={Logo} alt="Trumedfin Logo" className="w-64 h-auto" />
+              <img src={Logo} alt="Truemedfin Logo" className="w-64 h-auto" />
             </a>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-display">

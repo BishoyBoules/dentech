@@ -26,9 +26,9 @@ export const Navbar: React.FC = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0">
-              <span className="text-xl font-semibold text-gray-800">TruMedFin</span>
+              <span className="text-xl font-semibold text-gray-800">Truemedfin</span>
             </Link>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden md:ml-6 md:flex md:space-x-8">
               {user && (

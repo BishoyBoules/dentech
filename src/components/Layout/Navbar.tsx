@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
       <div className="flex justify-between items-center h-full px-4">
         <div className="flex items-center flex-1">
           <h1 className="text-2xl font-bold text-primary-600 dark:text-white mr-8">
-            TruMedFin
+            Truemedfin
           </h1>
 
           {/* Desktop Menu */}
