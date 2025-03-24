@@ -39,6 +39,7 @@ const AppRoutes: React.FC = () => {
           <Route index element={<Navigate to="/admin/specializations" replace />} />
           <Route path="items" element={<ItemsPage />} />
           <Route path="lists" element={<ListsPage />} />
+          <Route path='lists/:id/items' element={<ItemsPage />} />
           <Route path="specializations" element={<SpecializationsPage />} />
           <Route path="items/:id" element={<ItemDetailsPage />} />
           <Route path="items/:id/sub-items/:subId" element={<ItemDetailsPage />} />

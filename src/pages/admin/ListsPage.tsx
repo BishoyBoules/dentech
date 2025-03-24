@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from '../../components/Modal';
+import { Link } from 'react-router-dom';
 
 interface List {
     id: number;
@@ -101,6 +102,7 @@ const ListsPage: React.FC = () => {
                 if (response.data) {
                     setLists(response.data || []);
                 }
+                console.log('Lists fetched:', response.data);
             } catch (error) {
                 console.error('Error fetching lists:', error);
                 setLists([]);
@@ -205,7 +207,9 @@ const ListsPage: React.FC = () => {
                             <tr key={list.id}>
                                 <td className="px-6 py-4 whitespace-nowrap">{list.list_name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">${list.list_price.toFixed(2)}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{list.items.length}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <Link to={`/admin/lists/${list.id}/items`}> {list.items.length}</Link>
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button
                                         onClick={() => {
