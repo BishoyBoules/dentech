@@ -26,7 +26,7 @@ const LoadingSpinner = () => (
 const AppRoutes: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [listItems, setListItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   async function getListItems(id: number) {
     const response = await axios.get(`/api/pricing/lists/${id}/`);
