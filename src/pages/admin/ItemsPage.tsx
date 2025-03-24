@@ -186,7 +186,7 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/inventory/items/');
+        const response = await api.get('/api/inventory/items/');
         if (response.data) {
           setItems(response.data || []);
         }
@@ -202,7 +202,7 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
 
   const handleCreateItem = async (data: Item) => {
     try {
-      const response = await api.post('/inventory/items/', {
+      const response = await api.post('/api/inventory/items/', {
         item_name: data.item_name,
         price_per_unit: +data.price_per_unit,
         item_code: data.item_code,
@@ -220,7 +220,7 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
   const handleUpdateItem = async (data: Item) => {
     if (!selectedItem) return;
     try {
-      const response = await api.put(`/inventory/items/${selectedItem.id}/`, {
+      const response = await api.put(`/api/inventory/items/${selectedItem.id}/`, {
         item_name: data.item_name,
         price_per_unit: +data.price_per_unit,
         item_code: data.item_code,
@@ -252,7 +252,7 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
   const confirmDelete = async () => {
     if (!selectedItem) return;
     try {
-      await api.delete(`/inventory/items/${selectedItem.id}/`);
+      await api.delete(`/api/inventory/items/${selectedItem.id}/`);
       setItems(items.filter(item => item.id !== selectedItem.id));
       setIsDeleteModalOpen(false);
       setSelectedItem(null);

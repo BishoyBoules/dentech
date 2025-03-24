@@ -29,7 +29,7 @@ const AppRoutes: React.FC = () => {
   const [_loading, setLoading] = useState(true);
 
   async function getListItems(id: number) {
-    const response = await api.get(`/pricing/lists/${id}/`);
+    const response = await api.get(`/api/pricing/lists/${id}/`);
     setListItems(response.data.items || []);
   }
 
@@ -37,7 +37,7 @@ const AppRoutes: React.FC = () => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/inventory/items/');
+        const response = await api.get('/api/inventory/items');
         if (response.data) {
           setItems(response.data.items || []);
         }

@@ -101,7 +101,7 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
     useEffect(() => {
         const fetchLists = async () => {
             try {
-                const response = await api.get('/pricing/lists/');
+                const response = await api.get('/api/pricing/lists/');
                 if (response.data) {
                     setLists(response.data || []);
                 }
@@ -117,7 +117,7 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
 
     const handleCreateList = async (data: List) => {
         try {
-            const response = await api.post('/pricing/lists/', data);
+            const response = await api.post('/api/pricing/lists/', data);
             setLists(prevLists => [...prevLists, response.data]);
             setIsAddModalOpen(false);
         } catch (error) {
@@ -128,7 +128,7 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
     const handleUpdateList = async (data: List) => {
         if (!selectedList) return;
         try {
-            const response = await api.put(`/pricing/lists/${selectedList.id}/`, data);
+            const response = await api.put(`/api/pricing/lists/${selectedList.id}/`, data);
             setLists(prevLists =>
                 prevLists.map(list =>
                     list.id === selectedList.id ? response.data : list
@@ -143,7 +143,7 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
     const handleDeleteList = async () => {
         if (!selectedList) return;
         try {
-            await api.delete(`/pricing/lists/${selectedList.id}/`);
+            await api.delete(`/api/pricing/lists/${selectedList.id}/`);
             setLists(prevLists =>
                 prevLists.filter(list => list.id !== selectedList.id)
             );
