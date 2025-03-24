@@ -30,7 +30,7 @@ const ListForm: React.FC<ListFormProps> = ({ list, onSubmit, onCancel }) => {
             id: list?.id || 0,
             list_name: name.trim(),
             list_price: parseFloat(price),
-            clinic: list?.clinic || 1, // Default to clinic 1 for now
+            clinic: list?.clinic || 1,
             items: list?.items || []
         });
     };
@@ -85,7 +85,11 @@ const ListForm: React.FC<ListFormProps> = ({ list, onSubmit, onCancel }) => {
     );
 };
 
-const ListsPage: React.FC = () => {
+interface ListsPageProps {
+    sendId: (id: number) => void;
+}
+
+const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
     const [lists, setLists] = useState<List[]>([]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -102,7 +106,6 @@ const ListsPage: React.FC = () => {
                 if (response.data) {
                     setLists(response.data || []);
                 }
-                console.log('Lists fetched:', response.data);
             } catch (error) {
                 console.error('Error fetching lists:', error);
                 setLists([]);
@@ -111,7 +114,7 @@ const ListsPage: React.FC = () => {
             }
         };
         fetchLists();
-    }, []);
+    }, [selectedList]);
 
     const handleCreateList = async (data: List) => {
         try {
@@ -208,7 +211,9 @@ const ListsPage: React.FC = () => {
                                 <td className="px-6 py-4 whitespace-nowrap">{list.list_name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">${list.list_price.toFixed(2)}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <Link to={`/admin/lists/${list.id}/items`}> {list.items.length}</Link>
+                                    <Link to={`/admin/lists/${list.id}/`} onClick={() => {
+                                        sendId(list.id);
+                                    }}>{list.items.length}</Link>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button

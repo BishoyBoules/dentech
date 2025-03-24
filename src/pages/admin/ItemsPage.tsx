@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Item, Specialization } from '../../types/item';
 import axios from 'axios';
 import Modal from '../../components/Modal';
+import { useParams } from 'react-router-dom';
 
 interface ItemFormProps {
   item?: Item;
@@ -172,14 +173,14 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, onSubmit, onCancel }) => {
   );
 };
 
-const ItemsPage: React.FC = () => {
-  const [items, setItems] = useState<Item[]>([]);
+const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatch<React.SetStateAction<Item[]>> }) => {
   const [currentPage, _setCurrentPage] = useState(1);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [_loading, setLoading] = useState(true);
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -244,15 +245,6 @@ const ItemsPage: React.FC = () => {
     }
   };
 
-  // const handleDeleteItem = async (id: string) => {
-  //   try {
-  //     await axios.delete(`/api/inventory/items/${id}/`);
-  //     setItems(prevItems => prevItems.filter(item => item.id !== id));
-  //   } catch (error) {
-  //     console.error('Error deleting item:', error);
-  //   }
-  // };
-
   const handleEdit = (item: Item) => {
     setSelectedItem(item);
     setIsEditModalOpen(true);
@@ -278,7 +270,7 @@ const ItemsPage: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Items Management</h1>
+        <h1 className="text-2xl font-bold">{id ? 'List Items' : 'Items Management'}</h1>
         <button
           onClick={() => setIsAddModalOpen(true)}
           className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
@@ -348,7 +340,7 @@ const ItemsPage: React.FC = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {items.map((item) => (
-              <tr key={item.id}>
+              <tr key={item.id || item.item_name}>
                 <td className="px-6 py-4 whitespace-nowrap">{item.item_name}</td>
                 <td className="px-6 py-4 whitespace-nowrap">${item.price_per_unit}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

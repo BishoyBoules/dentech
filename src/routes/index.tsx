@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { UserRole } from '../types/user';
 import { ProtectedRoute } from '../components/ProtectedRoute';
@@ -10,6 +10,8 @@ import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
 import ItemsPage from '../pages/admin/ItemsPage';
 import ListsPage from '../pages/admin/ListsPage';
+import { Item } from '../types/item';
+import axios from 'axios';
 
 const RegisterPage = lazy(() => import('../pages/RegisterPage'));
 const SecretaryDashboard = lazy(() => import('../pages/SecretaryDashboard'));
@@ -22,6 +24,33 @@ const LoadingSpinner = () => (
 );
 
 const AppRoutes: React.FC = () => {
+  const [items, setItems] = useState<Item[]>([]);
+  const [listItems, setListItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  async function getListItems(id: number) {
+    const response = await axios.get(`/api/pricing/lists/${id}/`);
+    setListItems(response.data.items || []);
+  }
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('/api/inventory/items/');
+        if (response.data) {
+          setItems(response.data.items || []);
+        }
+      } catch (error) {
+        console.error('Error fetching items:', error);
+        setItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItems();
+  }, []);
+
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
@@ -37,9 +66,9 @@ const AppRoutes: React.FC = () => {
         {/* Protected admin routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/specializations" replace />} />
-          <Route path="items" element={<ItemsPage />} />
-          <Route path="lists" element={<ListsPage />} />
-          <Route path='lists/:id/items' element={<ItemsPage />} />
+          <Route path="items" element={<ItemsPage items={items} setItems={setItems} />} />
+          <Route path="lists" element={<ListsPage sendId={(id: number) => getListItems(id)} />} />
+          <Route path='lists/:id/' element={<ItemsPage items={listItems} setItems={setItems} />} />
           <Route path="specializations" element={<SpecializationsPage />} />
           <Route path="items/:id" element={<ItemDetailsPage />} />
           <Route path="items/:id/sub-items/:subId" element={<ItemDetailsPage />} />
