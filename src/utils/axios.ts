@@ -4,7 +4,7 @@ import axios from 'axios';
 const getBaseUrl = () => {
     if (process.env.NODE_ENV === 'production') {
         // Use the deployed API URL in production
-        return 'https://dentech-amb.netlify.app';
+        return 'https://truemedfin-testing.onrender.com';
     }
     // Use localhost in development
     return 'http://localhost:5173';
