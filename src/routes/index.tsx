@@ -11,7 +11,7 @@ import LoginPage from '../pages/LoginPage';
 import ItemsPage from '../pages/admin/ItemsPage';
 import ListsPage from '../pages/admin/ListsPage';
 import { Item } from '../types/item';
-import axios from 'axios';
+import api from '../utils/axios';
 
 const RegisterPage = lazy(() => import('../pages/RegisterPage'));
 const SecretaryDashboard = lazy(() => import('../pages/SecretaryDashboard'));
@@ -29,7 +29,7 @@ const AppRoutes: React.FC = () => {
   const [_loading, setLoading] = useState(true);
 
   async function getListItems(id: number) {
-    const response = await axios.get(`/api/pricing/lists/${id}/`);
+    const response = await api.get(`/pricing/lists/${id}/`);
     setListItems(response.data.items || []);
   }
 
@@ -37,7 +37,7 @@ const AppRoutes: React.FC = () => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/inventory/items/');
+        const response = await api.get('/inventory/items/');
         if (response.data) {
           setItems(response.data.items || []);
         }

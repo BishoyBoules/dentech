@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
+import api from '../../utils/axios';
 
 interface List {
     id: number;
@@ -101,8 +101,7 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
     useEffect(() => {
         const fetchLists = async () => {
             try {
-                setLoading(true);
-                const response = await axios.get('/api/pricing/lists/');
+                const response = await api.get('/pricing/lists/');
                 if (response.data) {
                     setLists(response.data || []);
                 }
@@ -114,35 +113,22 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
             }
         };
         fetchLists();
-    }, [selectedList]);
+    }, []);
 
     const handleCreateList = async (data: List) => {
         try {
-            const response = await axios.post('/api/pricing/lists/', {
-                list_name: data.list_name,
-                list_price: data.list_price,
-                clinic: data.clinic,
-                items: data.items
-            });
+            const response = await api.post('/pricing/lists/', data);
             setLists(prevLists => [...prevLists, response.data]);
             setIsAddModalOpen(false);
         } catch (error) {
             console.error('Error creating list:', error);
-            if (axios.isAxiosError(error) && error.response) {
-                console.error('Server response:', error.response.data);
-            }
         }
     };
 
     const handleUpdateList = async (data: List) => {
         if (!selectedList) return;
         try {
-            const response = await axios.put(`/api/pricing/lists/${selectedList.id}/`, {
-                list_name: data.list_name,
-                list_price: data.list_price,
-                clinic: data.clinic,
-                items: data.items
-            });
+            const response = await api.put(`/pricing/lists/${selectedList.id}/`, data);
             setLists(prevLists =>
                 prevLists.map(list =>
                     list.id === selectedList.id ? response.data : list
@@ -157,7 +143,7 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
     const handleDeleteList = async () => {
         if (!selectedList) return;
         try {
-            await axios.delete(`/api/pricing/lists/${selectedList.id}/`);
+            await api.delete(`/pricing/lists/${selectedList.id}/`);
             setLists(prevLists =>
                 prevLists.filter(list => list.id !== selectedList.id)
             );

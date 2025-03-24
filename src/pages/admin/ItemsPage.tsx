@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Item, Specialization } from '../../types/item';
-import axios from 'axios';
 import Modal from '../../components/Modal';
 import { useParams } from 'react-router-dom';
+import api from '../../utils/axios';
 
 interface ItemFormProps {
   item?: Item;
@@ -186,7 +186,7 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/inventory/items/');
+        const response = await api.get('/inventory/items/');
         if (response.data) {
           setItems(response.data || []);
         }
@@ -202,7 +202,7 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
 
   const handleCreateItem = async (data: Item) => {
     try {
-      const response = await axios.post('/api/inventory/items/', {
+      const response = await api.post('/inventory/items/', {
         item_name: data.item_name,
         price_per_unit: +data.price_per_unit,
         item_code: data.item_code,
@@ -214,16 +214,13 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
       setItems(prevItems => [...prevItems, response.data]);
     } catch (error) {
       console.error('Error creating item:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        console.error('Server response:', error.response.data);
-      }
     }
   };
 
   const handleUpdateItem = async (data: Item) => {
     if (!selectedItem) return;
     try {
-      const response = await axios.put(`/api/inventory/items/${selectedItem.id}/`, {
+      const response = await api.put(`/inventory/items/${selectedItem.id}/`, {
         item_name: data.item_name,
         price_per_unit: +data.price_per_unit,
         item_code: data.item_code,
@@ -239,9 +236,6 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
       );
     } catch (error) {
       console.error('Error updating item:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        console.error('Server response:', error.response.data);
-      }
     }
   };
 
@@ -258,7 +252,7 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
   const confirmDelete = async () => {
     if (!selectedItem) return;
     try {
-      await axios.delete(`/api/inventory/items/${selectedItem.id}/`);
+      await api.delete(`/inventory/items/${selectedItem.id}/`);
       setItems(items.filter(item => item.id !== selectedItem.id));
       setIsDeleteModalOpen(false);
       setSelectedItem(null);
