@@ -18,8 +18,6 @@ const SpecializationSection: React.FC<{
   title,
   specialization,
   items,
-  lists,
-  extraItems,
   onAddItem,
   onUpdateItem,
   onDeleteItem,
