@@ -5,6 +5,7 @@ import { ProtectedRoute } from '../components/ProtectedRoute';
 import AdminLayout from '../pages/admin/AdminLayout';
 import SpecializationsPage from '../pages/admin/SpecializationsPage';
 import ItemDetailsPage from '../pages/admin/ItemDetailsPage';
+import CategoryListsPage from '../pages/admin/CategoryListsPage';
 import AboutPage from '../pages/AboutPage';
 import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
@@ -27,6 +28,8 @@ const AppRoutes: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [listItems, setListItems] = useState<Item[]>([]);
   const [_loading, setLoading] = useState(true);
+  const [selectedListId, setSelectedListId] = useState<number | null>(null);
+  const [selectedList, setSelectedList] = useState<any>(null);
 
   async function getListItems(id: number) {
     const response = await api.get(`/api/pricing/lists/${id}/`);
@@ -37,7 +40,7 @@ const AppRoutes: React.FC = () => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/api/inventory/items');
+        const response = await api.get('/api/inventory/items/');
         if (response.data) {
           setItems(response.data.items || []);
         }
@@ -50,6 +53,21 @@ const AppRoutes: React.FC = () => {
     };
     fetchItems();
   }, []);
+
+  useEffect(() => {
+    const fetchCategoryLists = async () => {
+      if (selectedListId) {
+        try {
+          const response = await api.get(`/api/pricing/category/${selectedListId}`);
+          setSelectedList(response.data);
+        } catch (error) {
+          console.error('Error fetching category lists:', error);
+          setSelectedList(null);
+        }
+      }
+    };
+    fetchCategoryLists();
+  }, [selectedListId]);
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
@@ -69,9 +87,10 @@ const AppRoutes: React.FC = () => {
           <Route path="items" element={<ItemsPage items={items} setItems={setItems} />} />
           <Route path="lists" element={<ListsPage sendId={(id: number) => getListItems(id)} />} />
           <Route path='lists/:id/' element={<ItemsPage items={listItems} setItems={setItems} />} />
-          <Route path="specializations" element={<SpecializationsPage />} />
+          <Route path="specializations" element={<SpecializationsPage chooseSpecialization={(id: number) => setSelectedListId(id)} />} />
           <Route path="items/:id" element={<ItemDetailsPage />} />
           <Route path="items/:id/sub-items/:subId" element={<ItemDetailsPage />} />
+          <Route path="category-lists/:id" element={<CategoryListsPage lists={selectedList?.lists || []} name={selectedList?.category_name || ''} />} />
         </Route>
 
         {/* Protected secretary routes */}

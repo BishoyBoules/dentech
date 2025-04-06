@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Item, Specialization } from '../types/item';
+import { Item } from '../types/item';
 import { useNavigate } from 'react-router-dom';
 import ItemForm from './ItemForm';
 
 
 const SpecializationSection: React.FC<{
     title: string;
-    specialization: Specialization;
+    specialization: string;
     listItem: boolean;
     items: Item[];
     onAddItem: (item: Partial<Item>) => void;

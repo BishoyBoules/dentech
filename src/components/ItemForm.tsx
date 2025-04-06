@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Item, Specialization } from '../types/item';
+import { Item } from '../types/item';
 import dayjs from 'dayjs';
 
 interface ItemFormProps {
     item?: Item;
-    specialization: Specialization;
+    specialization?: string;
     onSubmit: (data: Partial<Item>) => void;
     onCancel: () => void;
 }

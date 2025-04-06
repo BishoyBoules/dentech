@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Item, Specialization } from '../../types/item';
+import { Item } from '../../types/item';
 import Modal from '../../components/Modal';
 import { useParams } from 'react-router-dom';
 import api from '../../utils/axios';
@@ -38,7 +38,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, onSubmit, onCancel }) => {
       default_number_of_subunits: +defaultSubunits,
       expiration_date: expirationDate,
       exportingUser: item?.exportingUser,
-      specialization: Specialization.DIAGNOSIS
+      specialization: 'Diagnosis'
     });
   };
 
