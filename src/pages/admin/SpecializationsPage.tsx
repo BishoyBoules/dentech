@@ -153,7 +153,7 @@ const SpecializationsPage = ({ chooseSpecialization }: { chooseSpecialization: (
 
   const getItems = async () => {
     try {
-      const response = await fetch('/api/pricing/category');
+      const response = await fetch('/api/pricing/category/');
       const data = await response.json();
       setCategories(data);
     } catch (error) {
