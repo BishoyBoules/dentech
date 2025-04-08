@@ -1,4 +1,4 @@
-import {User} from "./user";
+// import {User} from "./user";
 
 export interface Item {
   id: string;
@@ -10,14 +10,15 @@ export interface Item {
   default_number_of_subunits: number;
   expiration_date: string;
   specialization?: string;
-  exportingUser?: User;
   number_of_units?: number;
+  total_subunits?: number;
   subItems?: Item[];
   pricePerSubUnit?: number;
   available_subunits?: number;
   export_date?: string;
   exported_subunits?: number;
   release_date?: string
+  exporting_user?:string
 }
 
 export interface Category {

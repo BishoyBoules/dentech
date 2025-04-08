@@ -40,9 +40,9 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, onSubmit, onCancel }) => {
       available_subunits: item?.available_subunits,
       export_date: item?.export_date,
       exported_subunits: item?.exported_subunits,
-      exportingUser: item?.exportingUser,
       specialization: 'Diagnosis',
-      release_date: item?.release_date
+      release_date: item?.release_date,
+      exporting_user: item?.exporting_user
     });
   };
 
@@ -226,7 +226,6 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
 
     // Create the request payload
     const updateData = {
-      addition_date: selectedItem.addition_date,
       item_name: data.item_name,
       item_code: data.item_code,
       company_name: data.company_name,
@@ -256,8 +255,8 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
     } catch (error) {
       console.error('Error updating item:', error);
       // Log more details about the error
-      if (error.response) {
-        console.error('Error response:', error.response.data);
+      if (error) {
+        console.error('Error response:', error);
       }
     }
   };
