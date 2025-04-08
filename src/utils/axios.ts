@@ -6,8 +6,8 @@ const getBaseUrl = () => {
         // Use the deployed API URL in production
         return 'https://truemedfin-testing.onrender.com';
     }
-    // Use localhost in development
-    return 'http://localhost:5173';
+    // Use localhost in development with the correct backend port
+    return 'http://localhost:5173';  // or whatever port your Django backend is running on
 };
 
 // Create axios instance with base URL

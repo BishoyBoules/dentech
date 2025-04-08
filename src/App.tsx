@@ -1,16 +1,12 @@
-import { ConfigProvider, theme } from 'antd';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { ConfigProvider } from 'antd';
 import { AuthProvider } from './contexts/AuthContext';
 import AppRoutes from './routes';
 import './App.css';
 
 const AppContent = () => {
-  const { isDarkMode } = useTheme();
-
   return (
     <ConfigProvider
       theme={{
-        algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
           colorPrimary: '#4F46E5',
           fontFamily: 'Poppins, sans-serif',
@@ -27,9 +23,7 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <ThemeProvider>
-        <AppContent />
-      </ThemeProvider>
+      <AppContent />
     </AuthProvider>
   );
 };

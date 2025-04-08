@@ -37,8 +37,12 @@ const ItemForm: React.FC<ItemFormProps> = ({ item, onSubmit, onCancel }) => {
       default_number_of_units: +defaultUnits,
       default_number_of_subunits: +defaultSubunits,
       expiration_date: expirationDate,
+      available_subunits: item?.available_subunits,
+      export_date: item?.export_date,
+      exported_subunits: item?.exported_subunits,
       exportingUser: item?.exportingUser,
-      specialization: 'Diagnosis'
+      specialization: 'Diagnosis',
+      release_date: item?.release_date
     });
   };
 
@@ -219,23 +223,42 @@ const ItemsPage = ({ items, setItems }: { items: Item[]; setItems: React.Dispatc
 
   const handleUpdateItem = async (data: Item) => {
     if (!selectedItem) return;
+
+    // Create the request payload
+    const updateData = {
+      addition_date: selectedItem.addition_date,
+      item_name: data.item_name,
+      item_code: data.item_code,
+      company_name: data.company_name,
+      release_date: data.release_date || selectedItem.release_date,
+      expiration_date: data.expiration_date,
+      default_number_of_units: data.default_number_of_units,
+      default_number_of_subunits: data.default_number_of_subunits,
+      total_subunits: selectedItem.total_subunits || 0,
+      available_subunits: selectedItem.available_subunits || 0,
+      price_per_unit: data.price_per_unit,
+      export_date: selectedItem.export_date,
+      exported_subunits: selectedItem.exported_subunits || 0,
+      exporting_user: selectedItem.exporting_user,
+      number_of_units: selectedItem.number_of_units || 1 // Use existing value or default to 1
+    };
+
+    console.log('Update payload:', updateData); // Log the payload
+
     try {
-      const response = await api.put(`/api/inventory/items/${selectedItem.id}/`, {
-        item_name: data.item_name,
-        price_per_unit: +data.price_per_unit,
-        item_code: data.item_code,
-        company_name: data.company_name,
-        default_number_of_units: +(data.default_number_of_units ?? 0),
-        default_number_of_subunits: +(data.default_number_of_subunits ?? 0),
-        specialization: data.specialization
-      });
+      const response = await api.put(`/api/inventory/items/${selectedItem.id}/`, updateData);
       setItems(prevItems =>
         prevItems.map(item =>
           item.id === selectedItem.id ? response.data : item
         )
       );
+      setSelectedItem(null);
     } catch (error) {
       console.error('Error updating item:', error);
+      // Log more details about the error
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+      }
     }
   };
 

@@ -14,33 +14,16 @@
   }
 }
 
-/* Base Theme Colors */
 :root {
-  --background-light: #ffffff;
-  --background-dark: #1f2937;
-  --text-light: #213547;
-  --text-dark: #e5e7eb;
   font-family: 'Poppins', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
+  color: #213547;
+  background-color: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Light Mode */
-:root {
-  color: var(--text-light);
-  background-color: var(--background-light);
-}
-
-/* Dark Mode */
-:root.dark {
-  color: var(--text-dark);
-  background-color: var(--background-dark);
 }
 
 a {
@@ -73,7 +56,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f9f9f9;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -85,44 +68,35 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: var(--text-light);
-    background-color: var(--background-light);
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Ant Design Styles */
+.ant-card {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
 }
 
-/* Ant Design Dark Mode Overrides */
-.dark .ant-card,
-.dark .ant-modal-content,
-.dark .ant-modal-header,
-.dark .ant-drawer-content,
-.dark .ant-menu {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
+.ant-modal-content,
+.ant-modal-header,
+.ant-drawer-content,
+.ant-menu {
+  background-color: #ffffff;
+  color: #213547;
 }
 
-.dark .ant-modal-title,
-.dark .ant-drawer-title,
-.dark .ant-form-item-label > label,
-.dark .ant-typography {
-  color: var(--text-dark);
+.ant-modal-title,
+.ant-drawer-title,
+.ant-form-item-label > label,
+.ant-typography {
+  color: #213547;
 }
 
-.dark .ant-input,
-.dark .ant-input-password,
-.dark .ant-picker,
-.dark .ant-select-selector,
-.dark .ant-drawer-body {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
-  color: var(--text-dark) !important;
+.ant-input,
+.ant-input-password,
+.ant-picker,
+.ant-select-selector,
+.ant-drawer-body {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #213547 !important;
 }
 
 /* Custom Scrollbar */
@@ -135,10 +109,6 @@ button:focus-visible {
   background: #f1f1f1;
 }
 
-.dark ::-webkit-scrollbar-track {
-  background: #374151;
-}
-
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 4px;
@@ -146,12 +116,4 @@ button:focus-visible {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #4b5563;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
 }

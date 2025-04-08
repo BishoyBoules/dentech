@@ -5,14 +5,11 @@ import {
   HomeOutlined,
   CalendarOutlined,
   UserOutlined,
-  BulbOutlined,
   MenuOutlined
 } from '@ant-design/icons';
-import { useTheme } from '../../context/ThemeContext';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
-  const { isDarkMode, toggleTheme } = useTheme();
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -50,7 +47,7 @@ const Navbar: React.FC = () => {
     <nav className="w-full">
       <div className="flex justify-between items-center h-full px-4">
         <div className="flex items-center flex-1">
-          <h1 className="text-2xl font-bold text-primary-600 dark:text-white mr-8">
+          <h1 className="text-2xl font-bold text-primary-600 mr-8">
             Truemedfin
           </h1>
 
@@ -61,19 +58,11 @@ const Navbar: React.FC = () => {
               selectedKeys={[location.pathname]}
               items={menuItems}
               className="border-none bg-transparent flex-1"
-              theme={isDarkMode ? 'dark' : 'light'}
             />
           )}
         </div>
 
         <div className="flex items-center">
-          <Button
-            type="text"
-            icon={<BulbOutlined />}
-            onClick={toggleTheme}
-            className="ml-4"
-          />
-
           {/* Mobile Menu Button */}
           {isMobile && (
             <Button
@@ -91,7 +80,6 @@ const Navbar: React.FC = () => {
           placement="right"
           onClose={() => setIsDrawerVisible(false)}
           open={isDrawerVisible}
-          className={isDarkMode ? 'dark' : ''}
           width={250}
         >
           <Menu
@@ -99,7 +87,6 @@ const Navbar: React.FC = () => {
             selectedKeys={[location.pathname]}
             items={menuItems}
             onClick={() => setIsDrawerVisible(false)}
-            theme={isDarkMode ? 'dark' : 'light'}
             className="border-none bg-transparent"
           />
         </Drawer>

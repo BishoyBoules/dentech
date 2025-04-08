@@ -14,6 +14,10 @@ export interface Item {
   number_of_units?: number;
   subItems?: Item[];
   pricePerSubUnit?: number;
+  available_subunits?: number;
+  export_date?: string;
+  exported_subunits?: number;
+  release_date?: string
 }
 
 export interface Category {
