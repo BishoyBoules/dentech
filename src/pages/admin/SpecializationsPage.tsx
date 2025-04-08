@@ -3,6 +3,7 @@ import { Item, Category } from '../../types/item';
 import { useNavigate } from 'react-router-dom';
 import ItemForm from '../../components/ItemForm';
 import { Modal } from 'antd';
+import api from '../../utils/axios';
 
 const SpecializationSection: React.FC<{
   title?: string;
@@ -153,9 +154,8 @@ const SpecializationsPage = ({ chooseSpecialization }: { chooseSpecialization: (
 
   const getItems = async () => {
     try {
-      const response = await fetch('/api/pricing/category/');
-      const data = await response.json();
-      setCategories(data);
+      const response = await api.get('/api/pricing/category/');
+      setCategories(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
     }
