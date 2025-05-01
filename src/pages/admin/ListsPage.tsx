@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import api from '../../utils/axios';
+import { Item } from '../../types/item';
 
 interface List {
     id: number;
     list_name: string;
     list_price: number;
     clinic: number;
-    items: number[];
 }
 
 interface ListFormProps {
@@ -17,26 +17,112 @@ interface ListFormProps {
     onCancel: () => void;
 }
 
+interface ItemSelection {
+    item: Item;
+    isSelected: boolean;
+}
+
 const ListForm: React.FC<ListFormProps> = ({ list, onSubmit, onCancel }) => {
     const [name, setName] = useState(list?.list_name || '');
-    const [price, setPrice] = useState(list?.list_price?.toString() || '');
+    const [selectedItems, setSelectedItems] = useState<ItemSelection[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const [itemsResponse, listResponse] = await Promise.all([
+                    api.get('/api/inventory/items/'),
+                    list ? api.get(`/api/pricing/lists/${list.id}/`) : Promise.resolve({ data: null })
+                ]);
+
+                if (itemsResponse.data) {
+                    const itemsData = itemsResponse.data;
+                    const listItems = listResponse.data?.items || [];
+                    const listItemIds = listItems.map((item: List) => item.id);
+
+                    const initialSelections = itemsData.map((item: Item) => ({
+                        item,
+                        isSelected: listItemIds.includes(item.id)
+                    }));
+                    setSelectedItems(initialSelections);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchItems();
+    }, [list]);
+
+    const calculateTotalPrice = () => {
+        return selectedItems
+            .filter(selection => selection.isSelected)
+            .reduce((total, selection) => {
+                const price = Number(selection.item.price_per_unit) || 0;
+                return total + price;
+            }, 0);
+    };
+
+    const handleItemToggle = (itemId: string) => {
+        setSelectedItems(prev => prev.map(selection =>
+            selection.item.id === itemId
+                ? { ...selection, isSelected: !selection.isSelected }
+                : selection
+        ));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name.trim() || !price.trim()) {
+        if (!name.trim()) {
             return;
         }
-        onSubmit({
-            id: list?.id || 0,
-            list_name: name.trim(),
-            list_price: parseFloat(price),
-            clinic: list?.clinic || 1,
-            items: list?.items || []
-        });
+
+        try {
+            const selectedItemIds = selectedItems
+                .filter(selection => selection.isSelected)
+                .map(selection => selection.item.id);
+
+            if (selectedItemIds.length === 0) {
+                console.error('No items selected');
+                return;
+            }
+
+            const listData = {
+                list_name: name.trim(),
+                list_price: calculateTotalPrice(),
+                clinic: list?.clinic || 1,
+                items: selectedItemIds
+            };
+
+            let response;
+            if (list) {
+                response = await api.put(`/api/pricing/lists/${list.id}/`, listData);
+            } else {
+                response = await api.post('/api/pricing/lists/', listData);
+            }
+
+            onSubmit(response.data);
+        } catch (error: any) {
+            console.error('Error saving list:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+            }
+        }
+    };
+
+    if (loading) {
+        return <div>Loading items...</div>;
+    }
+
+    const formatPrice = (price: number | string) => {
+        const numPrice = Number(price) || 0;
+        return numPrice.toFixed(2);
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
             <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     List Name
@@ -50,36 +136,62 @@ const ListForm: React.FC<ListFormProps> = ({ list, onSubmit, onCancel }) => {
                     required
                 />
             </div>
+
             <div>
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                    List Price
-                </label>
-                <input
-                    type="number"
-                    id="price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    step="0.01"
-                    min="0"
-                    className="mt-1 block w-full rounded-md border-gray-300 border-[1px] border-solid shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required
-                />
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Select Items</h3>
+                <div className="max-h-96 overflow-y-auto border border-gray-200 border-solid rounded-md">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50 sticky top-0">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Select</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {selectedItems.map(selection => (
+                                <tr key={selection.item.id} className="hover:bg-gray-50">
+                                    <td className="px-6 py-4">
+                                        <input
+                                            type="checkbox"
+                                            checked={selection.isSelected}
+                                            onChange={() => handleItemToggle(selection.item.id)}
+                                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 border-[1px] border-solid rounded"
+                                        />
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {selection.item.item_name}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        ${formatPrice(selection.item.price_per_unit)}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div className="flex justify-end space-x-3">
-                <button
-                    type="button"
-                    onClick={onCancel}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-solid rounded-md hover:bg-gray-50"
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700"
-                    disabled={!name.trim() || !price.trim()}
-                >
-                    {list ? 'Update' : 'Create'}
-                </button>
+
+            <div className="flex justify-between items-center">
+                <div className="text-lg font-medium">
+                    Total Price: ${formatPrice(calculateTotalPrice())}
+                </div>
+                <div className="flex space-x-3">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-solid rounded-md hover:bg-gray-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700"
+                        disabled={!name.trim() || selectedItems.filter(i => i.isSelected).length === 0}
+                    >
+                        {list ? 'Update' : 'Create'}
+                    </button>
+                </div>
             </div>
         </form>
     );
@@ -105,8 +217,12 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
                 if (response.data) {
                     setLists(response.data || []);
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Error fetching lists:', error);
+                if (error.response) {
+                    console.error('Response data:', error.response.data);
+                    console.error('Response status:', error.response.status);
+                }
                 setLists([]);
             } finally {
                 setLoading(false);
@@ -120,8 +236,12 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
             const response = await api.post('/api/pricing/lists/', data);
             setLists(prevLists => [...prevLists, response.data]);
             setIsAddModalOpen(false);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating list:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+            }
         }
     };
 
@@ -135,8 +255,12 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
                 )
             );
             setIsEditModalOpen(false);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error updating list:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+            }
         }
     };
 
@@ -148,8 +272,12 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
                 prevLists.filter(list => list.id !== selectedList.id)
             );
             setIsDeleteModalOpen(false);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting list:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+            }
         }
     };
 
@@ -199,7 +327,7 @@ const ListsPage: React.FC<ListsPageProps> = ({ sendId }) => {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <Link to={`/admin/lists/${list.id}/`} onClick={() => {
                                         sendId(list.id);
-                                    }}>{list.items?.length}</Link>
+                                    }}>View</Link>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button

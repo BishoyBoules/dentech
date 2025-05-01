@@ -6,6 +6,8 @@ import AdminLayout from '../pages/admin/AdminLayout';
 import SpecializationsPage from '../pages/admin/SpecializationsPage';
 import ItemDetailsPage from '../pages/admin/ItemDetailsPage';
 import CategoryListsPage from '../pages/admin/CategoryListsPage';
+import PatientsPage from '../pages/admin/PatientsPage';
+import PatientProfilePage from '../pages/admin/PatientProfilePage';
 import AboutPage from '../pages/AboutPage';
 import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
@@ -91,6 +93,8 @@ const AppRoutes: React.FC = () => {
           <Route path="items/:id" element={<ItemDetailsPage />} />
           <Route path="items/:id/sub-items/:subId" element={<ItemDetailsPage />} />
           <Route path="category-lists/:id" element={<CategoryListsPage lists={selectedList?.lists || []} name={selectedList?.category_name || ''} />} />
+          <Route path="patients" element={<PatientsPage />} />
+          <Route path="patients/:id" element={<PatientProfilePage />} />
         </Route>
 
         {/* Protected secretary routes */}
