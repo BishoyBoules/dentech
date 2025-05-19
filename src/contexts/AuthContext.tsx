@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../utils/axios';
 import { User, AuthState, UserRole, Permission } from '../types/user';
 
 interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<{ token: string, user: User }>;
   logout: () => Promise<void>;
   register: (email: string, password: string, name: string, role?: UserRole) => Promise<void>;
   updateUserPermissions: (userId: string, permissions: Permission[]) => Promise<void>;
@@ -19,76 +20,113 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     error: null,
   });
 
+  // Check auth status when component mounts
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
-  const checkAuthStatus = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        // Mock user data
-        const mockUser: User = {
-          id: '1',
-          email: 'admin@example.com',
-          name: 'Admin User',
+  // Function to check if user is already logged in
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      try {
+        // Set the token in axios headers
+        api.defaults.headers.common['Authorization'] = `Token ${token}`;
+        
+        // Since we don't have a verify-token endpoint, we'll create a basic user object
+        // In a real app, you might want to validate the token with the server
+        const username = localStorage.getItem('username') || 'User';
+        const userId = localStorage.getItem('userId') || '1';
+        
+        const user: User = {
+          id: userId,
+          email: username,
+          name: username,
           role: UserRole.ADMIN,
           permissions: Object.values(Permission),
-          createdAt: '2025-02-23T20:56:21+02:00',
-          updatedAt: '2025-02-23T20:56:21+02:00',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
-
+        
         setAuthState({
-          user: mockUser,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null,
-        });
-      } else {
-        setAuthState({
-          user: null,
-          isAuthenticated: false,
-          isLoading: false,
-          error: null,
-        });
-      }
-    } catch (error) {
-      setAuthState({
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: 'Failed to check auth status',
-      });
-    }
-  };
-
-  const login = async (email: string, password: string) => {
-    try {
-      setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-
-      // Mock admin login for admin@example.com/admin
-      if (email === 'admin@example.com' && password === 'admin') {
-        const mockUser: User = {
-          id: '2',
-          email: 'admin@example.com',
-          name: 'Admin User',
-          role: UserRole.ADMIN,
-          permissions: Object.values(Permission),
-          createdAt: '2025-02-23T21:08:17+02:00',
-          updatedAt: '2025-02-23T21:08:17+02:00'
-        };
-
-        localStorage.setItem('token', 'mock-jwt-token-admin');
-        setAuthState({
-          user: mockUser,
+          user,
           isAuthenticated: true,
           isLoading: false,
           error: null
         });
-        return;
+      } catch (error) {
+        console.error('Error restoring auth state:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('userId');
+        
+        setAuthState({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+          error: 'Session expired. Please log in again.'
+        });
       }
+    } else {
+      setAuthState({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null
+      });
+    }
+  };
 
-      throw new Error('Invalid credentials');
+  const login = async (usernameParam: string, password: string) => {
+    try {
+      setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
+
+      // Use POST method for login as it's the standard for credential submission
+      // The 405 error indicates that GET is not allowed for this endpoint
+      const response = await api.post<{ token: string; user_id: number; username: string }>('/api/accounts/login/', {
+        username: usernameParam,
+        password
+      });
+
+      console.log('Login response:', response.data); // Log the response data
+
+      // Extract token and user from response based on the actual response format
+      const token = response.data.token;
+      const userId = response.data.user_id;
+      const receivedUsername = response.data.username;
+
+      // Create a user object with the information we have
+      const user: User = {
+        id: userId.toString(),
+        email: receivedUsername, // Use username as email 
+        name: receivedUsername,  // Use username as name
+        role: UserRole.ADMIN,    // Default to admin role
+        permissions: Object.values(Permission), // Default to all permissions
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      console.log('Extracted token:', token);
+
+      // Store authentication data in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('username', receivedUsername);
+      localStorage.setItem('userId', userId.toString());
+
+      // Set the token in the authorization header for future requests
+      // Using Token format which is common in Django REST Framework
+      api.defaults.headers.common['Authorization'] = `Token ${token}`;
+
+      setAuthState({
+        user,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null
+      });
+
+      // Return the token for direct access in the LoginPage
+      return { token, user };
     } catch (error) {
       localStorage.removeItem('token');
       setAuthState(prev => ({

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { UserRole } from '../types/user';
 import Logo from '../assets/Logos-02.png';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { login, user } = useAuth();
-  const [email, setEmail] = useState('');
+  const { login } = useAuth();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -18,15 +17,12 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      // Redirect based on role
-      if (user?.role === UserRole.ADMIN) {
-        navigate('/admin/specializations', { replace: true });
-      } else if (user?.role === UserRole.SECRETARY) {
-        navigate('/secretary', { replace: true });
-      } else {
-        navigate('/dashboard', { replace: true });
-      }
+      // Get token and user data from login response
+      const loginResponse = await login(username, password);
+      console.log('Login successful:', loginResponse);
+      
+      // Add token to URL and navigate to SpecializationsPage
+      navigate(`/admin/specializations?token=${loginResponse.token}`, { replace: true });
     } catch (err) {
       console.error('Login error:', err);
       setError('Failed to login. Please check your credentials.');
@@ -51,7 +47,7 @@ const LoginPage: React.FC = () => {
             Use these test credentials:
           </p>
           <p className="text-center text-xs text-gray-500">
-            Admin: admin@example.com / admin
+            Admin: admin / admin
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -62,19 +58,18 @@ const LoginPage: React.FC = () => {
           )}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email-address" className="sr-only">
-                Email address
+              <label htmlFor="username" className="sr-only">
+                Username
               </label>
               <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="username"
+                name="username"
+                type="text"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>
